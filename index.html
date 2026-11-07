@@ -1,0 +1,1984 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homeostasis: Equilibrio Dinámico y Mecanismos de Regulación Biológica | FCM UCCuyo</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            accent: {
+              DEFAULT: '#436600',
+              light: '#f1f6eb',
+              dark: '#2c4400',
+              hover: '#385500'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- FontAwesome 6 CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: JetBrains Mono & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- KaTeX CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: #f7f9f6;
+      color: #1f2937;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .tab-btn.active {
+      background-color: #436600 !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 6px -1px rgba(67, 102, 0, 0.2), 0 2px 4px -2px rgba(67, 102, 0, 0.2);
+    }
+    .tab-btn.active i {
+      color: #ffffff !important;
+    }
+    .tab-btn.active span {
+      color: #ffffff !important;
+    }
+    .tab-btn:not(.active) {
+      background-color: #ffffff;
+      color: #334155;
+      border: 1px solid #e2e8f0;
+    }
+    .tab-btn:not(.active):hover {
+      background-color: #f1f5f9;
+      color: #0f172a;
+    }
+    .tab-btn:not(.active) i {
+      color: #436600;
+    }
+    .interactive-card {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .interactive-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between custom-scrollbar">
+
+  <!-- ==================== CABECERA INSTITUCIONAL UCCUYO ==================== -->
+  <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 sm:py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-accent flex items-center justify-center text-white font-bold text-xl shadow-md">
+          CB
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold text-gray-800 tracking-wide uppercase">CIENCIAS BIOLÓGICAS EN SALUD</h1>
+          <p class="text-xs text-gray-500 font-semibold">Curso de Ingreso a la Licenciatura en Enfermería (Facultad de Cs. Médicas - UCCuyo)</p>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Botón Vademécum Teórico -->
+        <button onclick="openFormulasModal()" class="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg border border-gray-200 hover:bg-gray-200 transition">
+          <i class="fa-solid fa-book-bookmark text-accent"></i>
+          <span class="hidden sm:inline">Vademécum</span>
+        </button>
+        <!-- Botón Guía de Uso -->
+        <button onclick="openTutorial()" class="flex items-center gap-1.5 px-3 py-1.5 bg-accent text-white text-xs font-semibold rounded-lg shadow-sm hover:bg-accent-hover transition">
+          <i class="fa-solid fa-circle-question"></i>
+          <span>Guía de Uso</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== CONTENEDOR PRINCIPAL CON SIDEBAR ==================== -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-grow">
+    <div class="flex flex-col lg:flex-row gap-6">
+
+      <!-- SIDEBAR DE NAVEGACIÓN VERTICAL STICKY -->
+      <nav id="navTabs" class="w-full lg:w-64 flex-shrink-0 flex lg:flex-col gap-1.5 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0 z-10 sticky top-[73px]">
+        <button onclick="switchTab('modulo1')" id="tabBtn-modulo1" class="tab-btn active w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-bold transition-all text-left whitespace-nowrap">
+          <i class="fa-solid fa-wave-square text-sm w-4 text-center"></i>
+          <span>1. Equilibrio Dinámico</span>
+        </button>
+
+        <button onclick="switchTab('modulo2')" id="tabBtn-modulo2" class="tab-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-bold transition-all text-left whitespace-nowrap">
+          <i class="fa-solid fa-diagram-project text-sm w-4 text-center"></i>
+          <span>2. Circuito de Regulación</span>
+        </button>
+
+        <button onclick="switchTab('modulo3')" id="tabBtn-modulo3" class="tab-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-bold transition-all text-left whitespace-nowrap">
+          <i class="fa-solid fa-arrows-spin text-sm w-4 text-center"></i>
+          <span>3. Feedback: (-) vs (+)</span>
+        </button>
+
+        <button onclick="switchTab('modulo4')" id="tabBtn-modulo4" class="tab-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-bold transition-all text-left whitespace-nowrap">
+          <i class="fa-solid fa-gamepad text-sm w-4 text-center"></i>
+          <span class="flex-grow">4. Retos Gamificados</span>
+          <span class="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.5 rounded-full font-bold">3 Retos</span>
+        </button>
+      </nav>
+
+      <!-- ÁREA DE CONTENIDO -->
+      <div class="flex-grow min-w-0">
+
+    <!-- ==================== MODULO 1: CONCEPTO Y EQUILIBRIO DINAMICO ==================== -->
+    <section id="modulo1" class="tab-content block space-y-6">
+      
+      <!-- Banner Introductorio de Bienvenida -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 border-l-4 border-l-accent">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center space-x-2 text-accent text-xs font-semibold tracking-wider uppercase mb-1">
+              <i class="fa-solid fa-microscope"></i>
+              <span>Módulo 1 • Fundamentos de Biofisiología</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-800">
+              ¿Por qué la homeostasis es un equilibrio dinámico y no estático?
+            </h2>
+            <p class="text-sm text-slate-600 mt-1 max-w-3xl leading-relaxed">
+              La homeostasis es la capacidad del organismo vivo para mantener <strong>relativamente estables</strong> sus condiciones internas dentro de límites fisiológicos precisos y compatibles con la vida celular. El cuerpo no es una máquina rígida; fluctúa permanentemente respondiendo a estímulos continuos.
+            </p>
+          </div>
+          <div class="bg-accent-light border border-accent/30 p-3.5 rounded-xl flex items-center space-x-3 self-start md:self-auto shrink-0">
+            <i class="fa-solid fa-scale-balanced text-accent text-2xl"></i>
+            <div>
+              <p class="text-[11px] text-accent uppercase font-bold">Principio Fisiológico</p>
+              <p class="text-xs text-slate-700 font-mono">Fluctuación Alrededor del Set-Point</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cuadrícula Concepto Clave: Relativamente Estable vs Estático -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Tarjeta 1: La Falacia de lo Estático -->
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl mb-4">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="font-heading font-bold text-lg text-slate-900 mb-2">No es Inmutable ni Estático</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Un error frecuente en estudiantes de salud es concebir la homeostasis como un valor numérico fijo e inflexible. El organismo recibe constantes perturbaciones: variaciones térmicas ambientales, ayuno, ingesta, deshidratación o estrés emocional.
+            </p>
+          </div>
+          <div class="mt-4 pt-4 border-t border-slate-100 bg-amber-50/60 -mx-6 -mb-6 p-4 rounded-b-2xl">
+            <p class="text-xs text-amber-900 font-semibold flex items-center gap-2">
+              <i class="fa-solid fa-circle-info"></i> Oscila rítmicamente alrededor de un <em>set-point</em> (punto de referencia).
+            </p>
+          </div>
+        </div>
+
+        <!-- Tarjeta 2: Justificación Celular -->
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-accent-light text-accent flex items-center justify-center text-xl mb-4">
+              <i class="fa-solid fa-circle-nodes"></i>
+            </div>
+            <h3 class="font-heading font-bold text-lg text-slate-900 mb-2">La Célula: Razón de Ser</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              La célula es la unidad estructural y funcional básica de la vida. Para que los billones de células del cuerpo humano sinteticen proteínas, generen ATP y metabolicen sustancias, el líquido extracelular (medio interno) debe mantener pH, osmolaridad y solutos estrictamente regulados.
+            </p>
+          </div>
+          <div class="mt-4 pt-4 border-t border-slate-100 bg-accent-light/60 -mx-6 -mb-6 p-4 rounded-b-2xl">
+            <p class="text-xs text-slate-800 font-semibold flex items-center gap-2">
+              <i class="fa-solid fa-check-double"></i> Falla homeostática celular = Falla orgánica en el paciente.
+            </p>
+          </div>
+        </div>
+
+        <!-- Tarjeta 3: Ejemplo Clínico del Ejercicio Físico -->
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl mb-4">
+              <i class="fa-solid fa-person-running"></i>
+            </div>
+            <h3 class="font-heading font-bold text-lg text-slate-900 mb-2">El Desafío del Ejercicio Físico</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Durante el esfuerzo muscular, el consumo de $O_2$ y glucosa se dispara, y la producción de calor y $CO_2$ aumenta. El cuerpo no se paraliza: acelera la frecuencia cardíaca y respiratoria de modo adaptativo para mantener al medio interno dentro del margen de supervivencia.
+            </p>
+          </div>
+          <div class="mt-4 pt-4 border-t border-slate-100 bg-emerald-50/60 -mx-6 -mb-6 p-4 rounded-b-2xl">
+            <p class="text-xs text-emerald-900 font-semibold flex items-center gap-2">
+              <i class="fa-solid fa-bolt"></i> Ajustes dinámicos coordinados en tiempo real.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Panel Interactivo: Las 6 Variables Corporales Homeostáticas Clave -->
+      <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-xs">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-2">
+          <div>
+            <h3 class="font-heading font-bold text-xl text-slate-900 flex items-center gap-2.5">
+              <i class="fa-solid fa-clipboard-check text-accent"></i>
+              Las 6 Variables Fisiológicas Cardinales en Enfermería
+            </h3>
+            <p class="text-xs text-slate-500">Haz clic en cada constante biológica para explorar sus límites seguros, sensores corporales y consecuencias de la pérdida de equilibrio.</p>
+          </div>
+          <span class="text-xs font-semibold text-accent bg-accent-light px-3 py-1 rounded-full self-start sm:self-auto border border-accent/30">
+            Monitor Clínico
+          </span>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mt-6">
+          
+          <!-- Variable 1 -->
+          <button onclick="inspectVariable('temp')" class="var-btn p-3.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-accent-light hover:border-accent/40 transition-all text-left flex flex-col justify-between group active:scale-95" id="vbtn-temp">
+            <div class="flex items-center justify-between w-full mb-2">
+              <i class="fa-solid fa-temperature-half text-amber-500 text-lg group-hover:scale-110 transition-transform"></i>
+              <span class="text-[10px] font-bold text-slate-400">01</span>
+            </div>
+            <div>
+              <p class="text-xs font-semibold text-slate-500">Temperatura</p>
+              <p class="text-sm font-bold text-slate-800">36.5° - 37.5°C</p>
+            </div>
+          </button>
+
+          <!-- Variable 2 -->
+          <button onclick="inspectVariable('gluc')" class="var-btn p-3.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-accent-light hover:border-accent/40 transition-all text-left flex flex-col justify-between group active:scale-95" id="vbtn-gluc">
+            <div class="flex items-center justify-between w-full mb-2">
+              <i class="fa-solid fa-cubes-stacked text-blue-500 text-lg group-hover:scale-110 transition-transform"></i>
+              <span class="text-[10px] font-bold text-slate-400">02</span>
+            </div>
+            <div>
+              <p class="text-xs font-semibold text-slate-500">Glucemia (ayuno)</p>
+              <p class="text-sm font-bold text-slate-800">70 - 100 mg/dL</p>
+            </div>
+          </button>
+
+          <!-- Variable 3 -->
+          <button onclick="inspectVariable('water')" class="var-btn p-3.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-accent-light hover:border-accent/40 transition-all text-left flex flex-col justify-between group active:scale-95" id="vbtn-water">
+            <div class="flex items-center justify-between w-full mb-2">
+              <i class="fa-solid fa-droplet text-cyan-500 text-lg group-hover:scale-110 transition-transform"></i>
+              <span class="text-[10px] font-bold text-slate-400">03</span>
+            </div>
+            <div>
+              <p class="text-xs font-semibold text-slate-500">Volumen de Agua</p>
+              <p class="text-sm font-bold text-slate-800">~60% del peso</p>
+            </div>
+          </button>
+
+          <!-- Variable 4 -->
+          <button onclick="inspectVariable('elect')" class="var-btn p-3.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-accent-light hover:border-accent/40 transition-all text-left flex flex-col justify-between group active:scale-95" id="vbtn-elect">
+            <div class="flex items-center justify-between w-full mb-2">
+              <i class="fa-solid fa-atom text-purple-500 text-lg group-hover:scale-110 transition-transform"></i>
+              <span class="text-[10px] font-bold text-slate-400">04</span>
+            </div>
+            <div>
+              <p class="text-xs font-semibold text-slate-500">Electrolitos (Na+/K+)</p>
+              <p class="text-sm font-bold text-slate-800">135-145 mEq/L</p>
+            </div>
+          </button>
+
+          <!-- Variable 5 -->
+          <button onclick="inspectVariable('pa')" class="var-btn p-3.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-accent-light hover:border-accent/40 transition-all text-left flex flex-col justify-between group active:scale-95" id="vbtn-pa">
+            <div class="flex items-center justify-between w-full mb-2">
+              <i class="fa-solid fa-gauge-high text-rose-500 text-lg group-hover:scale-110 transition-transform"></i>
+              <span class="text-[10px] font-bold text-slate-400">05</span>
+            </div>
+            <div>
+              <p class="text-xs font-semibold text-slate-500">Presión Arterial</p>
+              <p class="text-sm font-bold text-slate-800">120 / 80 mmHg</p>
+            </div>
+          </button>
+
+          <!-- Variable 6 -->
+          <button onclick="inspectVariable('gases')" class="var-btn p-3.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-accent-light hover:border-accent/40 transition-all text-left flex flex-col justify-between group active:scale-95" id="vbtn-gases">
+            <div class="flex items-center justify-between w-full mb-2">
+              <i class="fa-solid fa-lungs text-teal-500 text-lg group-hover:scale-110 transition-transform"></i>
+              <span class="text-[10px] font-bold text-slate-400">06</span>
+            </div>
+            <div>
+              <p class="text-xs font-semibold text-slate-500">Gases (O₂ / CO₂)</p>
+              <p class="text-sm font-bold text-slate-800">SatO₂ > 95%</p>
+            </div>
+          </button>
+
+        </div>
+
+        <!-- Detalle Desplegable Dinámico de la Variable Seleccionada -->
+        <div id="variableDetailBox" class="mt-6 p-6 rounded-2xl bg-accent-light/70 border border-accent/30 transition-all">
+          <!-- Inyectado por JS -->
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ==================== MODULO 2: CIRCUITO DE REGULACION (TRIADA) ==================== -->
+    <section id="modulo2" class="tab-content hidden space-y-6">
+      
+      <!-- Module 2 Intro Banner -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 border-l-4 border-l-accent">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center space-x-2 text-accent text-xs font-semibold tracking-wider uppercase mb-1">
+              <i class="fa-solid fa-diagram-project"></i>
+              <span>Módulo 2 • Mecanismo Cibernético del Cuerpo Humano</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-800">
+              La Secuencia Lógica del Control Biológico
+            </h2>
+            <p class="text-sm text-slate-600 mt-1 max-w-3xl leading-relaxed">
+              Para que el organismo responda de forma coherente ante una perturbación, debe cumplirse un circuito integrado de 5 etapas sucesivas articuladas por la <strong>tríada de control</strong> (Receptor, Centro de Control y Efector).
+            </p>
+          </div>
+          <div class="bg-accent-light border border-accent/30 p-3.5 rounded-xl flex items-center space-x-3 self-start md:self-auto shrink-0">
+            <i class="fa-solid fa-arrows-spin text-accent text-2xl"></i>
+            <div>
+              <p class="text-[11px] text-accent uppercase font-bold">Secuencia Fisiológica</p>
+              <p class="text-xs text-slate-700 font-mono">5 Fases Cibernéticas</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+
+        <!-- Flujo Interactivo de 5 Fases -->
+        <div class="mt-8 relative">
+          
+          <!-- Pasos Gráficos -->
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-4 relative z-10">
+            
+            <!-- Etapa 1 -->
+            <div onclick="selectCircuitStep(1)" id="cstep-1" class="circuit-step-card cursor-pointer p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-accent transition-all text-center flex flex-col items-center">
+              <span class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 font-black text-xs flex items-center justify-center mb-3">1</span>
+              <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl mb-2">
+                <i class="fa-solid fa-bolt"></i>
+              </div>
+              <h4 class="font-heading font-bold text-slate-900 text-sm">Estímulo</h4>
+              <p class="text-[11px] text-slate-500 mt-1">Desviación o cambio del medio interno/externo.</p>
+            </div>
+
+            <!-- Etapa 2 -->
+            <div onclick="selectCircuitStep(2)" id="cstep-2" class="circuit-step-card cursor-pointer p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-accent transition-all text-center flex flex-col items-center">
+              <span class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 font-black text-xs flex items-center justify-center mb-3">2</span>
+              <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl mb-2">
+                <i class="fa-solid fa-satellite-dish"></i>
+              </div>
+              <h4 class="font-heading font-bold text-slate-900 text-sm">Receptor</h4>
+              <p class="text-[11px] text-slate-500 mt-1">Sensor biológico que capta la variación específica.</p>
+            </div>
+
+            <!-- Etapa 3 -->
+            <div onclick="selectCircuitStep(3)" id="cstep-3" class="circuit-step-card cursor-pointer p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-accent transition-all text-center flex flex-col items-center">
+              <span class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 font-black text-xs flex items-center justify-center mb-3">3</span>
+              <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl mb-2">
+                <i class="fa-solid fa-brain"></i>
+              </div>
+              <h4 class="font-heading font-bold text-slate-900 text-sm">Centro de Control</h4>
+              <p class="text-[11px] text-slate-500 mt-1">Compara con el set-point y determina la orden.</p>
+            </div>
+
+            <!-- Etapa 4 -->
+            <div onclick="selectCircuitStep(4)" id="cstep-4" class="circuit-step-card cursor-pointer p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-accent transition-all text-center flex flex-col items-center">
+              <span class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 font-black text-xs flex items-center justify-center mb-3">4</span>
+              <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl mb-2">
+                <i class="fa-solid fa-gears"></i>
+              </div>
+              <h4 class="font-heading font-bold text-slate-900 text-sm">Efector</h4>
+              <p class="text-[11px] text-slate-500 mt-1">Órgano, músculo o glándula que ejecuta la acción.</p>
+            </div>
+
+            <!-- Etapa 5 -->
+            <div onclick="selectCircuitStep(5)" id="cstep-5" class="circuit-step-card cursor-pointer p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-accent transition-all text-center flex flex-col items-center">
+              <span class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 font-black text-xs flex items-center justify-center mb-3">5</span>
+              <div class="w-12 h-12 rounded-xl bg-teal-100 text-teal-600 flex items-center justify-center text-xl mb-2">
+                <i class="fa-solid fa-circle-check"></i>
+              </div>
+              <h4 class="font-heading font-bold text-slate-900 text-sm">Respuesta</h4>
+              <p class="text-[11px] text-slate-500 mt-1">Ajuste fisiológico que restaura el equilibrio.</p>
+            </div>
+
+          </div>
+
+          <!-- Selector de Caso Fisiológico para ver el circuito en acción -->
+          <div class="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <span class="text-xs font-bold text-slate-700 flex items-center gap-2">
+              <i class="fa-solid fa-stethoscope text-accent"></i> Seleccionar Ejemplo Fisiológico:
+            </span>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="setCircuitCase('termo')" id="caseBtn-termo" class="px-3 py-1.5 rounded-lg text-xs font-bold border transition-all bg-accent text-white border-accent shadow-xs">
+                <i class="fa-solid fa-fire mr-1"></i> Golpe de Calor (Termorregulación)
+              </button>
+              <button onclick="setCircuitCase('glucosa')" id="caseBtn-glucosa" class="px-3 py-1.5 rounded-lg text-xs font-bold border transition-all bg-white text-slate-700 border-slate-300 hover:border-accent">
+                <i class="fa-solid fa-bread-slice mr-1"></i> Ingesta Glucídica (Insulina)
+              </button>
+              <button onclick="setCircuitCase('presion')" id="caseBtn-presion" class="px-3 py-1.5 rounded-lg text-xs font-bold border transition-all bg-white text-slate-700 border-slate-300 hover:border-accent">
+                <i class="fa-solid fa-heart-pulse mr-1"></i> Caída de Presión (Barorreflejo)
+              </button>
+            </div>
+          </div>
+
+          <!-- Desglose Didáctico de la Etapa Seleccionada -->
+          <div id="circuitDetailPanel" class="mt-4 p-6 rounded-2xl bg-white border border-slate-200 shadow-xs">
+            <!-- Cargado vía JS -->
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ==================== MODULO 3: FEEDBACK NEGATIVO VS POSITIVO ==================== -->
+    <section id="modulo3" class="tab-content hidden space-y-6">
+      
+      <!-- Module 3 Intro Banner -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 border-l-4 border-l-accent">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center space-x-2 text-accent text-xs font-semibold tracking-wider uppercase mb-1">
+              <i class="fa-solid fa-arrows-spin"></i>
+              <span>Módulo 3 • Sistemas Cibernéticos de Retroalimentación</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-800">
+              Retroalimentación Negativa vs. Retroalimentación Positiva
+            </h2>
+            <p class="text-sm text-slate-600 mt-1 max-w-3xl leading-relaxed">
+              La clave para el futuro profesional de enfermería es comprender cómo interpreta el organismo cada desviación. Mientras uno frena e invierte el cambio para mantenerte con vida cada segundo, el otro lo acelera para culminar un proceso explosivo y puntual.
+            </p>
+          </div>
+          <div class="bg-accent-light border border-accent/30 p-3.5 rounded-xl flex items-center space-x-3 self-start md:self-auto shrink-0">
+            <i class="fa-solid fa-code-compare text-accent text-2xl"></i>
+            <div>
+              <p class="text-[11px] text-accent uppercase font-bold">Diagnóstico Fisiológico</p>
+              <p class="text-xs text-slate-700 font-mono">Inversión vs Amplificación</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+
+        <!-- Comparación en Paralelo -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+          
+          <!-- Retroalimentación Negativa (Mecanismo Primordial) -->
+          <div class="rounded-2xl border-2 border-emerald-200 bg-emerald-50/30 p-6 flex flex-col justify-between relative overflow-hidden">
+            <div class="absolute -right-4 -bottom-4 text-emerald-100 opacity-60 pointer-events-none text-9xl">
+              <i class="fa-solid fa-rotate-left"></i>
+            </div>
+            <div class="relative z-10">
+              <div class="flex items-center justify-between mb-4">
+                <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-black tracking-wide flex items-center gap-1.5">
+                  <i class="fa-solid fa-shield"></i> MECANISMO PRIMORDIAL
+                </span>
+                <span class="text-emerald-700 font-bold text-xs uppercase">Estabilizador</span>
+              </div>
+              <h3 class="font-heading font-extrabold text-xl text-slate-900">Retroalimentación Negativa</h3>
+              <p class="text-xs font-semibold text-emerald-700 mt-1 mb-3">Contrarresta, frena e invierte el estímulo inicial</p>
+              
+              <div class="space-y-3 text-sm text-slate-700">
+                <p><strong>Principio Operativo:</strong> Si una variable fisiológica aumenta por encima del valor de referencia, la respuesta efectora la <strong>disminuye</strong>. Si cae, el efector la <strong>eleva</strong>.</p>
+                <div class="bg-white/80 p-3.5 rounded-xl border border-emerald-200 space-y-1.5 text-xs">
+                  <p class="font-bold text-slate-800">Ejemplos vitales en el paciente:</p>
+                  <ul class="list-disc list-inside space-y-1 text-slate-600">
+                    <li><strong>Hipertermia:</strong> Se activa vasodilatación y sudoración para enfriar.</li>
+                    <li><strong>Hiperglucemia:</strong> El páncreas libera insulina para captar glucosa y reducirla.</li>
+                    <li><strong>Hipotensión:</strong> Aumenta la frecuencia cardíaca y vasoconstricción.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-emerald-200/80 relative z-10">
+              <p class="text-xs text-emerald-900 font-medium">
+                <strong>Enfermería Clínica:</strong> Casi todos los signos vitales monitoreados en guardia responden a bucles de retroalimentación negativa que intentan defender el <em>medio interno</em>.
+              </p>
+            </div>
+          </div>
+
+          <!-- Retroalimentación Positiva (Mecanismo Transitorio) -->
+          <div class="rounded-2xl border-2 border-amber-200 bg-amber-50/30 p-6 flex flex-col justify-between relative overflow-hidden">
+            <div class="absolute -right-4 -bottom-4 text-amber-100 opacity-60 pointer-events-none text-9xl">
+              <i class="fa-solid fa-forward-step"></i>
+            </div>
+            <div class="relative z-10">
+              <div class="flex items-center justify-between mb-4">
+                <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-black tracking-wide flex items-center gap-1.5">
+                  <i class="fa-solid fa-bolt-lightning"></i> PROCESOS ESPECÍFICOS
+                </span>
+                <span class="text-amber-700 font-bold text-xs uppercase">Amplificador</span>
+              </div>
+              <h3 class="font-heading font-extrabold text-xl text-slate-900">Retroalimentación Positiva</h3>
+              <p class="text-xs font-semibold text-amber-700 mt-1 mb-3">Refuerza, amplifica o intensifica el estímulo inicial</p>
+              
+              <div class="space-y-3 text-sm text-slate-700">
+                <p><strong>Principio Operativo:</strong> La respuesta del efector empuja la variable aún <strong>más lejos</strong> del punto inicial, en la misma dirección, hasta lograr un evento culminante que desactiva el ciclo.</p>
+                <div class="bg-white/80 p-3.5 rounded-xl border border-amber-200 space-y-1.5 text-xs">
+                  <p class="font-bold text-slate-800">Ejemplos biológicos transitorios:</p>
+                  <ul class="list-disc list-inside space-y-1 text-slate-600">
+                    <li><strong>Trabajo de Parto:</strong> La presión del feto libera oxitocina $\rightarrow$ más contracción $\rightarrow$ más oxitocina hasta el nacimiento.</li>
+                    <li><strong>Coagulación Sanguínea:</strong> Activación plaquetaria $\rightarrow$ reclutamiento masivo de plaquetas en cascada hasta cerrar la herida.</li>
+                    <li><strong>Potencial de Acción:</strong> Apertura rápida de canales de $Na^+$ por despolarización.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-amber-200/80 relative z-10">
+              <p class="text-xs text-amber-900 font-medium">
+                <strong>Riesgo Fisiopatológico:</strong> Si la retroalimentación positiva no se frena con un evento final (ej. paro cardíaco o shock séptico descontrolado), puede ser letal.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Tabla Sintética de Diagnóstico Diferencial -->
+        <div class="mt-8 overflow-x-auto">
+          <table class="w-full text-left text-xs sm:text-sm border-collapse bg-white rounded-xl overflow-hidden border border-slate-200">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 uppercase font-heading font-bold text-[11px] tracking-wider">
+                <th class="p-3.5 border-b border-slate-200">Criterio Comparativo</th>
+                <th class="p-3.5 border-b border-slate-200 text-emerald-800 bg-emerald-50/50">Retroalimentación Negativa</th>
+                <th class="p-3.5 border-b border-slate-200 text-amber-800 bg-amber-50/50">Retroalimentación Positiva</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              <tr>
+                <td class="p-3.5 font-bold text-slate-800">Dirección de la respuesta</td>
+                <td class="p-3.5 text-slate-600 font-medium">Opuesta o inversa al estímulo inicial</td>
+                <td class="p-3.5 text-slate-600 font-medium">En la misma dirección (amplificación)</td>
+              </tr>
+              <tr>
+                <td class="p-3.5 font-bold text-slate-800">Efecto en la estabilidad</td>
+                <td class="p-3.5 text-emerald-700 font-bold">Estabiliza; restaura el equilibrio seguro</td>
+                <td class="p-3.5 text-amber-700 font-bold">Desestabiliza temporalmente hasta un límite</td>
+              </tr>
+              <tr>
+                <td class="p-3.5 font-bold text-slate-800">Frecuencia en el organismo</td>
+                <td class="p-3.5 text-slate-600">Constante, permanente y primordial</td>
+                <td class="p-3.5 text-slate-600">Infrecuente, episódica y de tiempo acotado</td>
+              </tr>
+              <tr>
+                <td class="p-3.5 font-bold text-slate-800">Mecanismo de detención</td>
+                <td class="p-3.5 text-slate-600">Alcanzar el set-point fisiológico</td>
+                <td class="p-3.5 text-slate-600">Un suceso externo/terminal (ej. expulsión fetal)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ==================== MODULO 4: RETOS GAMIFICADOS Y LABORATORIO ==================== -->
+    <section id="modulo4" class="tab-content hidden space-y-6">
+      
+      <!-- Module 4 Intro Banner -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 border-l-4 border-l-accent">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center space-x-2 text-accent text-xs font-semibold tracking-wider uppercase mb-1">
+              <i class="fa-solid fa-gamepad"></i>
+              <span>Módulo 4 • Evaluación Interactiva y Gamificación</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-800">
+              Estación de Retos Clínicos de la Homeostasis
+            </h2>
+            <p class="text-sm text-slate-600 mt-1 max-w-3xl leading-relaxed">
+              Supera los 3 niveles de desafío práctico para consolidar tu aprendizaje y desbloquear la medalla de honor <strong>"Guardián de la Homeostasis UCCuyo"</strong>.
+            </p>
+          </div>
+          <div class="bg-accent-light border border-accent/30 p-3.5 rounded-xl flex items-center space-x-3 self-start md:self-auto shrink-0">
+            <i class="fa-solid fa-trophy text-amber-500 text-2xl"></i>
+            <div>
+              <p class="text-[11px] text-accent uppercase font-bold">Meta Formativa</p>
+              <p class="text-xs text-slate-700 font-mono">600 Puntos Máximos</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sub-navegador de Retos -->
+      <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+        <div>
+          <h3 class="font-bold text-base text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-gamepad text-accent"></i> Seleccionar Nivel de Desafío:
+          </h3>
+          <p class="text-xs text-slate-500">Alterna entre los 3 retos interactivos.</p>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="switchChallenge(1)" id="chBtn-1" class="ch-nav-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-accent text-white shadow-xs">
+            Reto 1: Simulador Dinámico
+          </button>
+          <button onclick="switchChallenge(2)" id="chBtn-2" class="ch-nav-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-gray-700 border border-gray-200 hover:bg-gray-100">
+            Reto 2: Bucle Paso a Paso
+          </button>
+          <button onclick="switchChallenge(3)" id="chBtn-3" class="ch-nav-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-gray-700 border border-gray-200 hover:bg-gray-100">
+            Reto 3: Duelo de Bucles
+          </button>
+        </div>
+      </div>
+
+      <!-- ================= RETO 1: SIMULADOR DE OSCILOSCOPIO DINÁMICO ================= -->
+      <div id="challenge-1" class="challenge-box block bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div>
+            <span class="text-xs font-bold text-amber-700 bg-amber-100 px-2.5 py-0.5 rounded-md uppercase tracking-wider">
+              Reto 1 de 3: Laboratorio Dinámico
+            </span>
+            <h3 class="font-heading font-extrabold text-2xl text-slate-900 mt-1">
+              El Medidor del Equilibrio Dinámico
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-600">
+              Aplica diferentes perturbaciones biológicas al paciente virtual y observa cómo la retroalimentación negativa recupera la oscilación dentro de la franja fisiológica verde.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 px-3.5 py-2 rounded-xl">
+            <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span class="text-xs font-bold text-slate-700" id="simStatusText">Estado: Equilibrio Dinámico Basal</span>
+          </div>
+        </div>
+
+        <!-- Canvas Gráfico Fisiológico -->
+        <div class="relative w-full h-64 sm:h-80 bg-slate-950 rounded-2xl overflow-hidden border-2 border-slate-800 shadow-inner">
+          <canvas id="homeoCanvas" class="w-full h-full block"></canvas>
+          
+          <!-- Superposiciones de Información Fisiológica -->
+          <div class="absolute top-3 left-4 text-xs font-mono text-emerald-400 bg-slate-900/80 px-2.5 py-1.5 rounded-md border border-emerald-500/30">
+            <span id="canvasVarName">TEMPERATURA CORPORAL:</span> <strong id="canvasVarVal" class="text-white">37.0 °C</strong>
+          </div>
+
+          <div class="absolute bottom-3 left-4 text-[11px] font-mono text-slate-400 bg-slate-900/80 px-2.5 py-1 rounded border border-slate-700">
+            <span class="inline-block w-2.5 h-2.5 bg-emerald-500/40 border border-emerald-400 mr-1 rounded-xs"></span> Franja Segura Homeostática (Tolerancia Celular)
+          </div>
+
+          <div class="absolute top-3 right-4 flex items-center gap-1.5 text-xs font-mono text-slate-400">
+            <i class="fa-solid fa-heart-pulse text-rose-500 animate-pulse"></i>
+            <span>TRACER: ACTIVO</span>
+          </div>
+        </div>
+
+        <!-- Controles de Perturbación (Estímulos) -->
+        <div class="space-y-3">
+          <h4 class="font-heading font-bold text-sm text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-hand-fist text-accent"></i> Aplicar Estímulo / Desafío al Paciente:
+          </h4>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <button onclick="applyPerturbation('calor')" class="p-3 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-800 font-bold text-xs flex flex-col items-center gap-1 transition-all active:scale-95">
+              <i class="fa-solid fa-sun text-lg text-rose-600"></i>
+              <span>Onda de Calor Intenso</span>
+              <span class="text-[10px] font-normal text-rose-600">Aumenta Temp. corporal</span>
+            </button>
+
+            <button onclick="applyPerturbation('frio')" class="p-3 rounded-xl border border-cyan-200 bg-cyan-50 hover:bg-cyan-100 text-cyan-800 font-bold text-xs flex flex-col items-center gap-1 transition-all active:scale-95">
+              <i class="fa-solid fa-snowflake text-lg text-cyan-600"></i>
+              <span>Inmersión en Frío</span>
+              <span class="text-[10px] font-normal text-cyan-600">Baja Temp. corporal</span>
+            </button>
+
+            <button onclick="applyPerturbation('ejercicio')" class="p-3 rounded-xl border border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-800 font-bold text-xs flex flex-col items-center gap-1 transition-all active:scale-95">
+              <i class="fa-solid fa-person-running text-lg text-amber-600"></i>
+              <span>Sprint / Ejercicio Agudo</span>
+              <span class="text-[10px] font-normal text-amber-600">Aumenta FC y Calor</span>
+            </button>
+
+            <button onclick="applyPerturbation('azucar')" class="p-3 rounded-xl border border-purple-200 bg-purple-50 hover:bg-purple-100 text-purple-800 font-bold text-xs flex flex-col items-center gap-1 transition-all active:scale-95">
+              <i class="fa-solid fa-cake-candles text-lg text-purple-600"></i>
+              <span>Ingesta Dulce Masiva</span>
+              <span class="text-[10px] font-normal text-purple-600">Eleva Glucemia</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Cuadro de Explicación de la Respuesta Dinámica -->
+        <div id="simLogBox" class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-700 leading-relaxed">
+          <p class="font-bold text-slate-800 flex items-center gap-2 mb-1">
+            <i class="fa-solid fa-circle-nodes text-accent"></i> Mecanismo en curso:
+          </p>
+          <span id="simLogText">El sistema está en reposo. Las ondas representan micro-oscilaciones naturales del metabolismo basal. Selecciona un estímulo arriba para provocar una perturbación y ganar tus primeros puntos.</span>
+        </div>
+
+      </div>
+
+      <!-- ================= RETO 2: ENSAMBLADOR DE BUCLE PASO A PASO ================= -->
+      <div id="challenge-2" class="challenge-box hidden bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-6">
+        <div>
+          <span class="text-xs font-bold text-purple-700 bg-purple-100 px-2.5 py-0.5 rounded-md uppercase tracking-wider">
+            Reto 2 de 3: Secuencia Cibernética
+          </span>
+          <h3 class="font-heading font-extrabold text-2xl text-slate-900 mt-1">
+            El Bucle de Regulación Paso a Paso
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-600 mt-1">
+            <strong>Caso Clínico:</strong> El paciente presenta un incremento súbito de glucosa en sangre tras el almuerzo. Debes ordenar las 5 fichas desordenadas en la secuencia fisiológica correcta: <em>Estímulo $\rightarrow$ Receptor $\rightarrow$ Centro de Control $\rightarrow$ Efector $\rightarrow$ Respuesta</em>.
+          </p>
+        </div>
+
+        <!-- Fichas Desordenadas (Banco de Elementos) -->
+        <div>
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Fichas disponibles (Haz clic para agregarlas a tu circuito):</p>
+          <div id="scrambledPool" class="flex flex-wrap gap-2 min-h-14 p-3 bg-slate-100 rounded-xl border border-dashed border-slate-300">
+            <!-- Inyectadas por JS -->
+          </div>
+        </div>
+
+        <!-- Slots de Destino Ordenados -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <p class="text-xs font-bold text-slate-700 uppercase tracking-wider">Tu Secuencia Fisiológica Propuesta:</p>
+            <button onclick="resetOrderChallenge()" class="text-xs text-rose-600 hover:underline font-bold">
+              <i class="fa-solid fa-rotate-left"></i> Reiniciar fichas
+            </button>
+          </div>
+          <div id="targetSlots" class="grid grid-cols-1 sm:grid-cols-5 gap-3 p-4 bg-accent-light/50 rounded-2xl border border-accent/30">
+            <!-- 5 ranuras -->
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-200">
+          <div id="r2FeedbackMsg" class="text-xs sm:text-sm font-semibold text-slate-600">
+            Ubica los 5 componentes en orden cronológico funcional.
+          </div>
+          <button onclick="validateOrderChallenge()" id="btnValidateOrder" class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-accent hover:bg-accent text-white font-bold text-sm shadow-md transition-all active:scale-95 flex items-center justify-center gap-2">
+            <i class="fa-solid fa-check-circle"></i> Verificar Circuito (+200 pts)
+          </button>
+        </div>
+      </div>
+
+      <!-- ================= RETO 3: DUELO DE BUCLES (NEGATIVO VS POSITIVO) ================= -->
+      <div id="challenge-3" class="challenge-box hidden bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-6">
+        <div>
+          <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-md uppercase tracking-wider">
+            Reto 3 de 3: Clasificación Rápida
+          </span>
+          <h3 class="font-heading font-extrabold text-2xl text-slate-900 mt-1">
+            Duelo de Bucles: Negativo vs. Positivo
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-600 mt-1">
+            Lee cada escenario clínico o biológico y clasifica de inmediato si opera como una <strong>Retroalimentación Negativa</strong> (frenar o contrarrestar la perturbación) o <strong>Retroalimentación Positiva</strong> (amplificar el cambio).
+          </p>
+        </div>
+
+        <!-- Tarjeta de Pregunta Dinámica -->
+        <div id="quizContainer" class="bg-gradient-to-br from-slate-50 to-accent-light/30 p-6 sm:p-8 rounded-2xl border border-accent/30 relative">
+          
+          <div class="flex items-center justify-between text-xs font-bold text-slate-500 mb-4">
+            <span id="quizCounterText">Caso 1 de 6</span>
+            <span id="quizCaseCategory" class="px-2.5 py-0.5 rounded bg-white border border-slate-200 text-accent font-bold">Fisiología Humana</span>
+          </div>
+
+          <div class="min-h-24">
+            <h4 id="quizQuestionTitle" class="text-lg sm:text-xl font-heading font-bold text-slate-900 leading-snug">
+              Cargando caso...
+            </h4>
+            <p id="quizQuestionDesc" class="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
+              Descripción detallada del mecanismo corporal...
+            </p>
+          </div>
+
+          <!-- Botones de Elección Dual -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+            <button onclick="handleFeedbackAnswer('negativo')" class="p-4 rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 font-heading font-extrabold text-sm sm:text-base transition-all active:scale-98 flex items-center justify-center gap-3 shadow-xs">
+              <i class="fa-solid fa-rotate-left text-xl text-emerald-600"></i>
+              <span>Retroalimentación Negativa</span>
+            </button>
+
+            <button onclick="handleFeedbackAnswer('positivo')" class="p-4 rounded-xl border-2 border-amber-300 bg-white hover:bg-amber-50 text-amber-800 font-heading font-extrabold text-sm sm:text-base transition-all active:scale-98 flex items-center justify-center gap-3 shadow-xs">
+              <i class="fa-solid fa-bolt-lightning text-xl text-amber-600"></i>
+              <span>Retroalimentación Positiva</span>
+            </button>
+          </div>
+
+          <!-- Mensaje Formativo Inmediato -->
+          <div id="quizFeedbackBox" class="mt-4 p-4 rounded-xl hidden text-xs sm:text-sm">
+            <!-- Inyectado por JS -->
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ================= SECCIÓN DE LOGRO Y CERTIFICACIÓN ================= -->
+      <div id="badgeHonorSection" class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white rounded-2xl p-6 sm:p-8 shadow-md flex flex-col md:flex-row items-center justify-between gap-6 hidden">
+        <div class="flex items-center gap-4">
+          <div class="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-3xl text-amber-300 shadow-inner">
+            <i class="fa-solid fa-trophy"></i>
+          </div>
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider bg-white/25 px-2.5 py-0.5 rounded text-white">¡Misión Cumplida!</span>
+            <h3 class="text-xl sm:text-2xl font-heading font-black mt-1">Guardián de la Homeostasis UCCuyo</h3>
+            <p class="text-xs sm:text-sm text-emerald-100 max-w-xl">
+              Has demostrado comprender el equilibrio dinámico, la tríada de control y la distinción entre feedback negativo y positivo. Tienes las bases celulares para el ingreso a Enfermería.
+            </p>
+          </div>
+        </div>
+        <button onclick="openDiplomaModal()" class="px-5 py-3 rounded-xl bg-white text-emerald-800 hover:bg-emerald-50 font-bold text-sm shadow-lg transition-transform active:scale-95 whitespace-nowrap">
+          <i class="fa-solid fa-certificate mr-1.5 text-amber-500"></i> Ver Certificado Simbólico
+        </button>
+      </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ==================== FOOTER CANÓNICO ==================== -->
+  <footer class="bg-white border-t border-gray-200 py-3 text-center text-xs text-gray-500 font-medium">
+    Desarrollado por vesalio - Todos los derechos reservados
+  </footer>
+
+  <!-- ==================== MODAL 1: VADEMÉCUM CONCEPTUAL ==================== -->
+  <div id="modal-formulas" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-gray-200">
+      <div class="p-4 border-b border-gray-100 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-accent-light text-accent flex items-center justify-center font-bold text-sm">
+            <i class="fa-solid fa-book-medical"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-gray-900">Vademécum Conceptual de Homeostasis y Regulación</h3>
+            <p class="text-[11px] text-gray-500 font-mono">Fórmulas, Circuitos y Constantes Fisiológicas</p>
+          </div>
+        </div>
+        <button onclick="closeModal('modal-formulas')" class="text-gray-400 hover:text-gray-600 p-1 rounded-lg">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="p-5 overflow-y-auto custom-scrollbar space-y-4 text-xs text-gray-700">
+        <!-- 1 -->
+        <div class="p-3.5 rounded-xl bg-gray-50 border border-gray-200">
+          <h4 class="font-bold text-accent text-xs mb-1">1. Definición Biofisiológica de Homeostasis</h4>
+          <p class="mb-2">Capacidad del organismo para mantener relativamente estables sus condiciones internas dentro de límites estrechos y compatibles con la función celular y la vida:</p>
+          <div class="p-2.5 bg-white rounded-lg border border-gray-200 font-mono text-center text-xs text-gray-800">
+            $$\text{Homeostasis} \neq \text{Inmutable o Estático} \iff \text{Equilibrio Dinámico con Fluctuación en Rango Seguro}$$
+          </div>
+        </div>
+
+        <!-- 2 -->
+        <div class="p-3.5 rounded-xl bg-gray-50 border border-gray-200">
+          <h4 class="font-bold text-accent text-xs mb-1">2. Secuencia Lógica del Circuito de Regulación</h4>
+          <p class="mb-2">Secuencia unidireccional cibernética ante cualquier alteración del medio interno:</p>
+          <div class="p-2.5 bg-white rounded-lg border border-gray-200 font-mono text-center text-xs text-gray-800">
+            $$\text{Estímulo} \xrightarrow{\text{Sensación}} \text{Receptor} \xrightarrow{\text{Vía Aferente}} \text{Centro de Control} \xrightarrow{\text{Vía Eferente}} \text{Efector} \longrightarrow \text{Respuesta}$$
+          </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="p-3.5 rounded-xl bg-gray-50 border border-gray-200">
+          <h4 class="font-bold text-accent text-xs mb-1">3. Tríada de Control Biológico</h4>
+          <ul class="list-disc list-inside space-y-1 text-gray-600">
+            <li><strong>Receptor:</strong> Sensor biológico que capta la desviación o perturbación específica del medio interno o externo.</li>
+            <li><strong>Centro de Control:</strong> Núcleo integrador (ej. Hipotálamo, Bulbo Raquídeo, Páncreas endocrino) que evalúa la señal frente al <em>set-point</em> y emite la orden correctiva.</li>
+            <li><strong>Efector:</strong> Órgano, tejido, glándula o músculo que ejecuta la acción fisiológica concreta para restablecer el equilibrio.</li>
+          </ul>
+        </div>
+
+        <!-- 4 -->
+        <div class="p-3.5 rounded-xl bg-gray-50 border border-gray-200">
+          <h4 class="font-bold text-accent text-xs mb-1">4. Feedback Negativo vs. Feedback Positivo</h4>
+          <div class="space-y-1.5 text-gray-600">
+            <p><strong>Retroalimentación Negativa (Primordial):</strong> La respuesta efectora produce un cambio en dirección <em>inversa/opuesta</em> al estímulo inicial para neutralizarlo. $$\Delta \text{Variable} \uparrow \Longrightarrow \text{Respuesta} \downarrow \quad (\text{Estabiliza})$$</p>
+            <p><strong>Retroalimentación Positiva (Transitoria):</strong> La respuesta efectora <em>amplifica y refuerza</em> el estímulo en la misma dirección hasta un evento culminante terminal. $$\Delta \text{Variable} \uparrow \Longrightarrow \text{Respuesta} \uparrow\uparrow \quad (\text{Amplifica: parto, coagulación})$$</p>
+          </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="p-3.5 rounded-xl bg-gray-50 border border-gray-200">
+          <h4 class="font-bold text-accent text-xs mb-1">5. Constantes Homeostáticas Monitoreadas en Enfermería</h4>
+          <div class="grid grid-cols-2 gap-2 text-[11px] font-mono text-gray-600">
+            <div class="p-2 bg-white rounded border border-gray-200"><strong>Temperatura:</strong> 36.5 - 37.5 °C</div>
+            <div class="p-2 bg-white rounded border border-gray-200"><strong>Glucemia ayuno:</strong> 70 - 100 mg/dL</div>
+            <div class="p-2 bg-white rounded border border-gray-200"><strong>Presión Arterial:</strong> ~120/80 mmHg</div>
+            <div class="p-2 bg-white rounded border border-gray-200"><strong>Potasio plasmático:</strong> 3.5 - 5.0 mEq/L</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-3 border-t border-gray-100 bg-gray-50 rounded-b-2xl flex justify-end">
+        <button onclick="closeModal('modal-formulas')" class="px-4 py-2 bg-accent text-white text-xs font-bold rounded-lg hover:bg-accent-hover transition">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 2: GUÍA DE USO ==================== -->
+  <div id="modal-tutorial" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[88vh] flex flex-col shadow-2xl border border-gray-200">
+      <div class="bg-accent p-4 text-white flex items-center justify-between rounded-t-2xl">
+        <div class="flex items-center gap-2.5">
+          <i class="fa-solid fa-circle-question text-xl"></i>
+          <div>
+            <h3 class="text-sm font-bold leading-tight">Guía de Uso del Simulador | Homeostasis</h3>
+            <p class="text-[11px] text-accent-light font-mono">Curso de Ingreso a la Licenciatura en Enfermería &bull; FCM UCCuyo</p>
+          </div>
+        </div>
+        <button onclick="closeModal('modal-tutorial')" class="text-white hover:text-gray-200 p-1 rounded-lg transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto custom-scrollbar space-y-5 text-xs text-gray-700 leading-relaxed">
+        
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-1 flex items-center gap-2">
+            <i class="fa-solid fa-bullseye"></i> 1. Propósito Formativo del Simulador
+          </h4>
+          <p>
+            Diseñado específicamente para los aspirantes al curso de ingreso a la Licenciatura en Enfermería de la Facultad de Ciencias Médicas (Universidad Católica de Cuyo, San Juan). Su objetivo pedagógico es que el estudiante interiorice la <strong>homeostasis como un equilibrio dinámico</strong> ("relativamente estable") compatible con la vida celular, domine la <strong>tríada de control biológico</strong> (Receptor $\rightarrow$ Centro de Control $\rightarrow$ Efector) y distinga la <strong>retroalimentación negativa</strong> (mecanismo primordial de reversión y protección del paciente) de la <strong>retroalimentación positiva</strong> (procesos transitorios de amplificación).
+          </p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-1 flex items-center gap-2">
+            <i class="fa-solid fa-layer-group"></i> 2. Módulos Temáticos de Aprendizaje
+          </h4>
+          <ul class="list-disc list-inside space-y-2 text-gray-600">
+            <li>
+              <strong>Módulo 1: Concepto de Homeostasis y Equilibrio Dinámico:</strong>
+              Desmitifica la idea del cuerpo como un estado estático o inmutable; profundiza en la justificación celular (viabilidad del líquido extracelular/medio interno) y en el ejemplo del ejercicio muscular agudo (ajustes coordinados de frecuencia cardíaca, respiratoria y calor). Incluye un <em>Monitor Clínico de 6 Variables Cardinales</em> (Temperatura, Glucemia, Volumen de Agua, Electrolitos $Na^+/K^+$, Presión Arterial y Gases $O_2/CO_2$) con valores normales, receptores, centros integradores y riesgo de descompensación.
+            </li>
+            <li>
+              <strong>Módulo 2: Circuito de los Mecanismos de Regulación:</strong>
+              Desarrolla la secuencia lógica cibernética en 5 etapas sucesivas: <em>Estímulo $\rightarrow$ Receptor $\rightarrow$ Centro de Control $\rightarrow$ Efector $\rightarrow$ Respuesta</em>. Permite interactuar con 3 escenarios fisiológicos reales: golpe de calor (termorregulación hipotalámica y sudoración), sobrecarga de glucosa (secreción de insulina pancreática) e hipotensión ortostática (barorreflejo arterial simpático).
+            </li>
+            <li>
+              <strong>Módulo 3: Sistemas de Retroalimentación (Negativa vs. Positiva):</strong>
+              Contrasta en paralelo el mecanismo estabilizador primordial (retroalimentación negativa que invierte y contrarresta el cambio para recuperar el set-point) frente a la retroalimentación positiva (amplificación transitoria que empuja la variable más lejos hasta un evento culminante, como el parto, la cascada de coagulación o el potencial de acción). Incluye una tabla comparativa de diagnóstico diferencial con 4 criterios clave.
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-1 flex items-center gap-2">
+            <i class="fa-solid fa-gamepad"></i> 3. Estación de Retos Prácticos y Gamificación
+          </h4>
+          <div class="space-y-2 text-gray-600">
+            <div class="p-2.5 bg-gray-50 rounded-xl border border-gray-200">
+              <strong class="text-slate-800 block mb-0.5"><i class="fa-solid fa-wave-square text-accent mr-1"></i> Reto 1: El Medidor del Equilibrio Dinámico (+150 pts):</strong>
+              Osciloscopio gráfico en tiempo real basado en Canvas. Permite provocar perturbaciones agudas (ola de calor, inmersión en frío, sprint físico o sobrecarga de azúcar) y visualizar cómo la retroalimentación negativa atenúa las oscilaciones y devuelve la variable a la franja fisiológica verde de seguridad celular.
+            </div>
+            <div class="p-2.5 bg-gray-50 rounded-xl border border-gray-200">
+              <strong class="text-slate-800 block mb-0.5"><i class="fa-solid fa-diagram-project text-accent mr-1"></i> Reto 2: El Bucle de Regulación Paso a Paso (+200 pts):</strong>
+              Dinámica de ordenamiento secuencial. Frente a un caso clínico de hiperglucemia postprandial, el aspirante debe ubicar las 5 fichas desordenadas en su orden cronológico exacto de la vía refleja.
+            </div>
+            <div class="p-2.5 bg-gray-50 rounded-xl border border-gray-200">
+              <strong class="text-slate-800 block mb-0.5"><i class="fa-solid fa-arrows-spin text-accent mr-1"></i> Reto 3: Duelo de Bucles: Negativo vs. Positivo (+240 pts):</strong>
+              Banco interactivo de 6 casos fisiológicos y sanitarios (presión arterial, parto, sudoración, coagulación, insulina, potencial de acción) para categorizar con retroalimentación formativa y justificación inmediata (+40 pts por caso).
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-1 flex items-center gap-2">
+            <i class="fa-solid fa-book-medical"></i> 4. Vademécum Conceptual de Consulta
+          </h4>
+          <p>
+            Accesible desde la cabecera en cualquier momento. Contiene las definiciones metrológicas, leyes fisiológicas, secuencias aferente/eferente y la tabla de constantes vitales esenciales de referencia.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-1 flex items-center gap-2">
+            <i class="fa-solid fa-medal"></i> 5. Sistema de Puntuación y Certificación Simbólica
+          </h4>
+          <p>
+            A medida que interactúas y resuelves los desafíos, acumulas hasta 600 puntos. Al alcanzar 500 puntos obtienes el rango máximo de <strong>"Guardián de la Homeostasis UCCuyo"</strong> y se habilita el diploma de distinción honorífica para imprimir o guardar en PDF.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="p-3 border-t border-gray-100 bg-gray-50 rounded-b-2xl flex justify-end">
+        <button onclick="closeModal('modal-tutorial')" class="px-4 py-2 bg-accent text-white text-xs font-bold rounded-lg hover:bg-accent-hover transition">Comenzar Simulación</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL DE CERTIFICADO SIMBÓLICO ==================== -->
+  <div id="diplomaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 border-4 border-accent shadow-2xl relative">
+      <button onclick="closeDiplomaModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="text-center space-y-3">
+        <div class="inline-block p-3 rounded-full bg-accent-light text-accent mb-1">
+          <i class="fa-solid fa-award text-4xl"></i>
+        </div>
+        <h4 class="text-xs font-bold text-accent uppercase tracking-widest">Facultad de Ciencias Médicas • Universidad Católica de Cuyo</h4>
+        <h3 class="text-2xl sm:text-3xl font-heading font-black text-slate-900">Distinción de Honor Fisiológico</h3>
+        <p class="text-xs text-slate-500 max-w-md mx-auto">
+          Por haber completado con excelencia el simulador interactivo de <strong>Equilibrio Dinámico y Mecanismos de Regulación Biológica</strong>.
+        </p>
+
+        <div class="p-4 my-4 rounded-2xl bg-slate-50 border border-slate-200 text-left space-y-2 text-xs sm:text-sm">
+          <p><strong>Aspirante:</strong> <span class="text-slate-700">Estudiante de Ingreso a Licenciatura en Enfermería</span></p>
+          <p><strong>Competencias validadas:</strong></p>
+          <ul class="list-disc list-inside text-slate-600 text-xs space-y-0.5">
+            <li>Dominio del concepto de homeostasis como equilibrio dinámico celular.</li>
+            <li>Identificación de la tríada de control (Receptor $\rightarrow$ Centro de Control $\rightarrow$ Efector).</li>
+            <li>Diferenciación funcional de retroalimentación negativa vs positiva en clínica.</li>
+          </ul>
+        </div>
+
+        <div class="pt-2 flex justify-center gap-3">
+          <button onclick="window.print()" class="px-5 py-2.5 rounded-xl bg-accent text-white font-bold text-xs hover:bg-accent-hover transition-all flex items-center gap-2">
+            <i class="fa-solid fa-print"></i> Imprimir o Guardar PDF
+          </button>
+          <button onclick="closeDiplomaModal()" class="px-5 py-2.5 rounded-xl bg-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-300 transition-all">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LÓGICA JAVASCRIPT ==================== -->
+  <script>
+    /* ==========================================================
+       1. ESTADO GLOBAL Y SISTEMA DE PUNTUACIÓN
+       ========================================================== */
+    const state = {
+      score: 0,
+      maxScore: 600,
+      completedChallenges: {
+        ch1: false,
+        ch2: false,
+        ch3: false
+      },
+      currentVariable: 'temp',
+      currentCase: 'termo',
+      currentCircuitStep: 1,
+      // Reto 2 State
+      r2SelectedSlots: [null, null, null, null, null],
+      // Reto 3 State
+      quizIndex: 0,
+      quizCorrectCount: 0
+    };
+
+    // Función sintética para audios fisiológicos suaves (Web Audio API)
+    function playBeep(type = 'ping') {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (type === 'correct') {
+          osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+          osc.frequency.exponentialRampToValueAtTime(659.25, audioCtx.currentTime + 0.15); // E5
+          gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.25);
+        } else if (type === 'error') {
+          osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+          osc.frequency.linearRampToValueAtTime(180, audioCtx.currentTime + 0.2);
+          gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.25);
+        } else {
+          osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+          gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.1);
+        }
+      } catch (e) {
+        // Fallback silencioso si el navegador bloquea audio
+      }
+    }
+
+    function addScore(points) {
+      state.score = Math.min(state.score + points, state.maxScore);
+      updateScoreUI();
+    }
+
+    function updateScoreUI() {
+      const display = document.getElementById('scoreDisplay');
+      const badgeText = document.getElementById('rankBadgeText');
+      const badgeIcon = document.getElementById('badgeIcon');
+
+      display.textContent = `${state.score} / ${state.maxScore} pts`;
+
+      if (state.score >= 500) {
+        badgeText.textContent = "Guardián Homeostático";
+        badgeText.className = "text-xs font-bold text-emerald-600";
+        badgeIcon.className = "w-9 h-9 rounded-lg bg-emerald-500 text-white flex items-center justify-center shadow-sm";
+        document.getElementById('badgeHonorSection').classList.remove('hidden');
+      } else if (state.score >= 250) {
+        badgeText.textContent = "Monitor de Constantes";
+        badgeText.className = "text-xs font-bold text-accent";
+        badgeIcon.className = "w-9 h-9 rounded-lg bg-accent-light0 text-white flex items-center justify-center shadow-sm";
+      } else {
+        badgeText.textContent = "Aspirante Inicial";
+      }
+    }
+
+    /* ==========================================================
+       2. CONTROLADOR DE PESTAÑAS (TABS) Y MODALES
+       ========================================================== */
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      const target = document.getElementById(tabId);
+      if (target) target.classList.remove('hidden');
+
+      const btn = document.getElementById(`tabBtn-${tabId}`);
+      if (btn) {
+        btn.classList.add('active');
+      }
+
+      if (tabId === 'modulo4') {
+        // Redimensionar canvas al abrir pestaña de retos
+        setTimeout(initCanvas, 100);
+      }
+    }
+
+    function openFormulasModal() {
+      openModal('modal-formulas');
+    }
+
+    function openTutorial() {
+      openModal('modal-tutorial');
+    }
+
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.remove('hidden');
+        if (window.renderMathInElement) {
+          renderMathInElement(modal, {
+            delimiters: [
+              { left: '$$', right: '$$', display: true },
+              { left: '$', right: '$', display: false },
+              { left: '\\(', right: '\\)', display: false },
+              { left: '\\[', right: '\\]', display: true }
+            ],
+            throwOnError: false
+          });
+        }
+      }
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.add('hidden');
+      }
+    }
+
+    /* ==========================================================
+       3. MÓDULO 1: VARIABLES CORPORALES HOMEOSTÁTICAS
+       ========================================================== */
+    const variablesData = {
+      temp: {
+        title: "Temperatura Corporal Central",
+        range: "36.5 °C a 37.5 °C",
+        sensor: "Termorreceptores hipotalámicos y cutáneos",
+        center: "Hipotálamo (termostato biológico)",
+        effectors: "Glándulas sudoríparas, músculo esquelético (tiritona), vasos periféricos",
+        impact: "Desviaciones desnaturalizan enzimas y paralizan el metabolismo celular. Por encima de 41°C sobreviene daño neuronal irreversible.",
+        icon: "fa-temperature-half",
+        color: "amber"
+      },
+      gluc: {
+        title: "Concentración de Glucosa en Sangre",
+        range: "70 a 100 mg/dL (en ayunas)",
+        sensor: "Células alfa y beta de los islotes de Langerhans",
+        center: "Páncreas endocrino",
+        effectors: "Hígado (glucogénesis/glucogenólisis), tejido adiposo y músculo",
+        impact: "La glucosa es el combustible primario del cerebro. La hipoglucemia severa (<50 mg/dL) causa confusión, convulsiones y coma hipoglucémico.",
+        icon: "fa-cubes-stacked",
+        color: "blue"
+      },
+      water: {
+        title: "Volumen de Agua Corporal Total",
+        range: "~60% del peso en adultos jóvenes",
+        sensor: "Osmorreceptores hipotalámicos y barorreceptores vasculares",
+        center: "Hipotálamo (secreción de ADH / hormona antidiurética)",
+        effectors: "Túbulos renales (reabsorción facultativa de agua), mecanismo de la sed",
+        impact: "La deshidratación reduce la volemia, descompensa la perfusión tisular y eleva la toxicidad metabólica en las células.",
+        icon: "fa-droplet",
+        color: "cyan"
+      },
+      elect: {
+        title: "Concentración de Sales y Electrólitos (Na⁺, K⁺, Ca²⁺)",
+        range: "Na⁺: 135-145 mEq/L | K⁺: 3.5-5.0 mEq/L",
+        sensor: "Células yuxtaglomerulares renales y quimiorreceptores",
+        center: "Corteza suprarrenal (Aldosterona) y sistema neuroendocrino",
+        effectors: "Nefronas renales y tracto gastrointestinal",
+        impact: "El potasio ($K^+$) regula la excitabilidad eléctrica del miocardio. Una hiperpotasemia o hipopotasemia severa produce arritmias letales.",
+        icon: "fa-atom",
+        color: "purple"
+      },
+      pa: {
+        title: "Presión Arterial Sistémica",
+        range: "~120 / 80 mmHg (normotensión)",
+        sensor: "Barorreceptores en el seno carotídeo y cayado aórtico",
+        center: "Centro vasomotor y cardíaco del bulbo raquídeo",
+        effectors: "Músculo cardíaco (frecuencia y contractilidad) y músculo liso arteriolar",
+        impact: "Asegura la presión de perfusión continua en órganos nobles (cerebro, riñón y corazón). Su caída produce shock circulatorio.",
+        icon: "fa-gauge-high",
+        color: "rose"
+      },
+      gases: {
+        title: "Gases Sanguíneos: Oxígeno (O₂) y Dióxido de Carbono (CO₂)",
+        range: "SatO₂: 95 - 100% | PaCO₂: 35 - 45 mmHg",
+        sensor: "Quimiorreceptores aórticos, carotídeos y centrales bulbares",
+        center: "Centro respiratorio del tronco encefálico",
+        effectors: "Músculo diafragma y músculos intercostales (ventilación)",
+        impact: "El $CO_2$ es un ácido volátil en equilibrio con el $pH$. La hipoventilación provoca acidosis respiratoria incompatible con la vida.",
+        icon: "fa-lungs",
+        color: "teal"
+      }
+    };
+
+    function inspectVariable(key) {
+      state.currentVariable = key;
+      const data = variablesData[key];
+
+      document.querySelectorAll('.var-btn').forEach(b => {
+        b.classList.remove('border-accent', 'bg-accent-light/80', 'ring-2', 'ring-accent/20');
+      });
+      const activeBtn = document.getElementById(`vbtn-${key}`);
+      if (activeBtn) {
+        activeBtn.classList.add('border-accent', 'bg-accent-light/80', 'ring-2', 'ring-accent/20');
+      }
+
+      const box = document.getElementById('variableDetailBox');
+      box.innerHTML = `
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-4 border-b border-accent/20">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-xl bg-white shadow-xs border border-accent/30 flex items-center justify-center text-xl text-accent">
+              <i class="fa-solid ${data.icon}"></i>
+            </div>
+            <div>
+              <span class="text-xs font-black uppercase tracking-wider text-accent">Constante Fisiológica Monitoreada</span>
+              <h4 class="text-lg font-heading font-extrabold text-slate-900">${data.title}</h4>
+            </div>
+          </div>
+          <div class="bg-white px-4 py-2 rounded-xl border border-accent/30 text-right">
+            <span class="text-[10px] font-bold text-slate-400 uppercase block">Rango de Normalidad</span>
+            <span class="text-sm font-black text-emerald-600 font-mono">${data.range}</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 text-xs">
+          <div class="bg-white p-3.5 rounded-xl border border-accent/20">
+            <strong class="text-slate-800 block mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-satellite-dish text-blue-500"></i> Sensor / Receptor:
+            </strong>
+            <p class="text-slate-600 leading-relaxed">${data.sensor}</p>
+          </div>
+          <div class="bg-white p-3.5 rounded-xl border border-accent/20">
+            <strong class="text-slate-800 block mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-brain text-purple-500"></i> Centro de Control:
+            </strong>
+            <p class="text-slate-600 leading-relaxed">${data.center}</p>
+          </div>
+          <div class="bg-white p-3.5 rounded-xl border border-accent/20">
+            <strong class="text-slate-800 block mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-gears text-emerald-500"></i> Efectores Involucrados:
+            </strong>
+            <p class="text-slate-600 leading-relaxed">${data.effectors}</p>
+          </div>
+        </div>
+
+        <div class="mt-4 p-3 bg-rose-50/70 border border-rose-200 rounded-xl text-xs text-rose-900 leading-relaxed flex items-center gap-2.5">
+          <i class="fa-solid fa-triangle-exclamation text-rose-600 text-base shrink-0"></i>
+          <span><strong>Relevancia en Enfermería:</strong> ${data.impact}</span>
+        </div>
+      `;
+    }
+
+    /* ==========================================================
+       4. MÓDULO 2: CIRCUITO DE REGULACIÓN (TRÍADA)
+       ========================================================== */
+    const circuitCases = {
+      termo: {
+        title: "Hipertermia por Esfuerzo o Ambiente Cálido",
+        steps: {
+          1: { name: "Estímulo", desc: "Aumento de la temperatura corporal central por encima de 37.5 °C debido al calor ambiental o ejercicio.", icon: "fa-temperature-arrow-up", color: "rose" },
+          2: { name: "Receptor", desc: "Termorreceptores centrales en el hipotálamo y periféricos en la piel detectan la elevación de energía térmica.", icon: "fa-satellite-dish", color: "blue" },
+          3: { name: "Centro de Control", desc: "El área preóptica del hipotálamo compara la señal térmica con el set-point y activa vías de disipación de calor.", icon: "fa-brain", color: "purple" },
+          4: { name: "Efector", desc: "Glándulas sudoríparas estimuladas (sudoración) y músculo liso arteriolar de la piel relajado (vasodilatación periférica).", icon: "fa-droplet", color: "emerald" },
+          5: { name: "Respuesta", desc: "Evaporación de sudor y radiación de calor a través de la piel enrojecida, reduciendo la temperatura hacia 37.0 °C.", icon: "fa-shield-halved", color: "teal" }
+        }
+      },
+      glucosa: {
+        title: "Hiperglucemia Post-Ingesta Alimentaria",
+        steps: {
+          1: { name: "Estímulo", desc: "Absorción intestinal de carbohidratos eleva la glucosa plasmática a 140 mg/dL.", icon: "fa-pizza-slice", color: "rose" },
+          2: { name: "Receptor", desc: "Células beta de los islotes pancreáticos censan el incremento del flujo intracelular de glucosa.", icon: "fa-microscope", color: "blue" },
+          3: { name: "Centro de Control", desc: "El páncreas endocrino procesa la señal y decide la secreción directa de la hormona anabólica Insulina.", icon: "fa-brain", color: "purple" },
+          4: { name: "Efector", desc: "Hígado, músculo esquelético y adipocitos expresan transportadores GLUT4 para captar glucosa.", icon: "fa-dna", color: "emerald" },
+          5: { name: "Respuesta", desc: "Entrada masiva de glucosa a las células y síntesis de glucógeno; la glucemia desciende a su rango basal (80-90 mg/dL).", icon: "fa-check", color: "teal" }
+        }
+      },
+      presion: {
+        title: "Hipotensión Ortostática (Ponerse de pie bruscamente)",
+        steps: {
+          1: { name: "Estímulo", desc: "La gravedad desplaza la sangre hacia las extremidades inferiores; la presión arterial sistémica desciende.", icon: "fa-arrow-down", color: "rose" },
+          2: { name: "Receptor", desc: "Barorreceptores del seno carotídeo y arco aórtico reducen su tasa de descarga por menor estiramiento.", icon: "fa-wave-square", color: "blue" },
+          3: { name: "Centro de Control", desc: "El centro cardiovascular del bulbo raquídeo inhibe el parasimpático y activa el sistema simpático.", icon: "fa-bolt", color: "purple" },
+          4: { name: "Efector", desc: "Nodo sinusal cardíaco (aumenta FC y gasto) y arteriolas sistémicas (vasoconstricción periférica).", icon: "fa-heart", color: "emerald" },
+          5: { name: "Respuesta", desc: "Aumento de la resistencia vascular y gasto cardíaco, restableciendo la presión adecuada para perfundir el cerebro.", icon: "fa-circle-check", color: "teal" }
+        }
+      }
+    };
+
+    function setCircuitCase(caseKey) {
+      state.currentCase = caseKey;
+      
+      document.querySelectorAll('#caseBtn-termo, #caseBtn-glucosa, #caseBtn-presion').forEach(btn => {
+        btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold border transition-all bg-white text-slate-700 border-slate-300 hover:border-accent";
+      });
+      const currentBtn = document.getElementById(`caseBtn-${caseKey}`);
+      if (currentBtn) {
+        currentBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold border transition-all bg-accent text-white border-accent shadow-xs";
+      }
+
+      renderCircuitDetail();
+    }
+
+    function selectCircuitStep(stepNum) {
+      state.currentCircuitStep = stepNum;
+      
+      document.querySelectorAll('.circuit-step-card').forEach((card, idx) => {
+        card.classList.remove('border-accent', 'bg-accent-light', 'ring-2', 'ring-accent/20');
+        if (idx + 1 === stepNum) {
+          card.classList.add('border-accent', 'bg-accent-light', 'ring-2', 'ring-accent/20');
+        }
+      });
+
+      renderCircuitDetail();
+    }
+
+    function renderCircuitDetail() {
+      const cCase = circuitCases[state.currentCase];
+      const step = cCase.steps[state.currentCircuitStep];
+      const panel = document.getElementById('circuitDetailPanel');
+
+      panel.innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3">
+          <div class="flex items-center gap-3">
+            <span class="w-9 h-9 rounded-xl bg-accent text-white font-black text-sm flex items-center justify-center">
+              ${state.currentCircuitStep}
+            </span>
+            <div>
+              <span class="text-[10px] font-bold uppercase text-accent tracking-wider">Paso del Circuito en: ${cCase.title}</span>
+              <h4 class="font-heading font-extrabold text-base text-slate-900">${step.name}</h4>
+            </div>
+          </div>
+          <span class="text-xs font-semibold px-2.5 py-1 rounded bg-slate-100 text-slate-600">
+            Fase ${state.currentCircuitStep} de 5
+          </span>
+        </div>
+
+        <div class="mt-4 flex items-start gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-accent-light text-accent flex items-center justify-center text-xl shrink-0 mt-1">
+            <i class="fa-solid ${step.icon}"></i>
+          </div>
+          <div class="space-y-2">
+            <p class="text-sm text-slate-700 leading-relaxed font-medium">${step.desc}</p>
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600">
+              <strong>Rol de Enfermería en esta fase:</strong> ${
+                state.currentCircuitStep === 1 ? "Identificar oportunamente el signo de alarma o el factor causante de la variación." :
+                state.currentCircuitStep === 2 ? "Comprender la vía fisiológica de detección para no alterar los sensores corporales." :
+                state.currentCircuitStep === 3 ? "Reconocer que el sistema nervioso o endocrino está calculando la dosis correctiva endógena." :
+                state.currentCircuitStep === 4 ? "Observar la manifestación física del efector (ej. palidez, sudoración o taquicardia)." :
+                "Verificar la normalización de la constante vital en la hoja de enfermería."
+              }
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    /* ==========================================================
+       5. RETO 1: SIMULADOR DE OSCILOSCOPIO DINÁMICO (CANVAS)
+       ========================================================== */
+    let canvas, ctx;
+    let animId;
+    let simTime = 0;
+    let currentValue = 37.0;
+    let targetValue = 37.0;
+    let baseValue = 37.0;
+    let isPerturbed = false;
+    let perturbationName = "Ninguna";
+    const historyData = [];
+
+    function initCanvas() {
+      canvas = document.getElementById('homeoCanvas');
+      if (!canvas) return;
+      ctx = canvas.getContext('2d');
+
+      // Ajustar resolución según contenedor
+      const rect = canvas.parentElement.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+
+      // Inicializar buffer
+      if (historyData.length === 0) {
+        for (let i = 0; i < Math.floor(canvas.width / 3); i++) {
+          historyData.push(baseValue + (Math.sin(i * 0.1) * 0.15));
+        }
+      }
+
+      if (!animId) {
+        animateCanvas();
+      }
+    }
+
+    window.addEventListener('resize', () => {
+      if (canvas) {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+      }
+    });
+
+    function applyPerturbation(type) {
+      playBeep('ping');
+      isPerturbed = true;
+      const log = document.getElementById('simLogText');
+      const status = document.getElementById('simStatusText');
+
+      if (!state.completedChallenges.ch1) {
+        state.completedChallenges.ch1 = true;
+        addScore(150);
+      }
+
+      if (type === 'calor') {
+        targetValue = 39.4;
+        perturbationName = "Hipertermia aguda (39.4 °C)";
+        status.textContent = "¡Alerta!: Desviación por calor ambiental";
+        status.className = "text-xs font-bold text-rose-600";
+        log.innerHTML = "<strong>Estímulo detectado:</strong> Temperatura elevada. <br><strong>Reacción en cadena:</strong> Termorreceptores $\\rightarrow$ Hipotálamo anterior activa sudoración profusa y vasodilatación cutánea. Observa cómo la curva roja desciende progresivamente hacia la franja verde gracias a la retroalimentación negativa.";
+      } else if (type === 'frio') {
+        targetValue = 34.8;
+        perturbationName = "Hipotermia leve (34.8 °C)";
+        status.textContent = "¡Alerta!: Desviación por exposición a frío";
+        status.className = "text-xs font-bold text-cyan-600";
+        log.innerHTML = "<strong>Estímulo detectado:</strong> Descenso térmico. <br><strong>Reacción en cadena:</strong> El hipotálamo posterior ordena vasoconstricción periférica (piel fría) y contracciones rítmicas musculares (escalofríos/tiritona) para generar calor metabólico y retornar al set-point.";
+      } else if (type === 'ejercicio') {
+        targetValue = 38.6;
+        perturbationName = "Esfuerzo físico intenso";
+        status.textContent = "Adaptación activa: Demanda metabólica elevada";
+        status.className = "text-xs font-bold text-amber-600";
+        log.innerHTML = "<strong>Aumento de demanda de O₂ y nutrientes:</strong> La contracción muscular genera calor residual. El organismo eleva la frecuencia cardíaca y la ventilación en un equilibrio dinámico continuo que sostiene la función sin colapsar.";
+      } else if (type === 'azucar') {
+        targetValue = 38.0; // representativo en la misma escala
+        perturbationName = "Sobrecarga de Carbohidratos";
+        status.textContent = "Regulación endocrina: Pico de absorción";
+        status.className = "text-xs font-bold text-purple-600";
+        log.innerHTML = "<strong>Elevación de la osmolaridad/glucosa:</strong> Las células beta pancreáticas liberan insulina. Los tejidos efectores incorporan el azúcar. En minutos, la retroalimentación negativa normaliza el valor basal.";
+      }
+    }
+
+    function animateCanvas() {
+      if (!ctx) return;
+      simTime += 0.05;
+
+      // Dinámica de aproximación homeostática (retroalimentación negativa)
+      if (isPerturbed) {
+        // La variable se mueve suavemente hacia la perturbación
+        currentValue += (targetValue - currentValue) * 0.04;
+        // Y el mecanismo corrector del cuerpo la devuelve lentamente a 37.0
+        targetValue += (baseValue - targetValue) * 0.012;
+
+        if (Math.abs(currentValue - baseValue) < 0.15 && Math.abs(targetValue - baseValue) < 0.1) {
+          isPerturbed = false;
+          document.getElementById('simStatusText').textContent = "Estado: Equilibrio Dinámico Restaurado";
+          document.getElementById('simStatusText').className = "text-xs font-bold text-emerald-600";
+        }
+      } else {
+        // Micro-oscilaciones naturales del equilibrio dinámico ("relativamente estable")
+        currentValue = baseValue + (Math.sin(simTime * 1.5) * 0.18) + (Math.cos(simTime * 0.8) * 0.08);
+      }
+
+      // Actualizar display
+      document.getElementById('canvasVarVal').textContent = `${currentValue.toFixed(2)} °C`;
+
+      // Actualizar buffer de ondas
+      historyData.push(currentValue);
+      if (historyData.length > Math.floor(canvas.width / 3)) {
+        historyData.shift();
+      }
+
+      // Dibujar fondo oscuro y grilla clínica
+      ctx.fillStyle = '#020617';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Líneas de grilla
+      ctx.strokeStyle = 'rgba(2, 132, 199, 0.15)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < canvas.width; x += 30) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+      }
+      for (let y = 0; y < canvas.height; y += 30) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+      }
+
+      // Escala: 33°C (abajo) a 41°C (arriba) -> rango = 8°C
+      const valToY = (val) => {
+        const minT = 34.0;
+        const maxT = 40.5;
+        const norm = (val - minT) / (maxT - minT);
+        return canvas.height - (norm * canvas.height);
+      };
+
+      // Dibujar Franja Segura Homeostática (36.5° a 37.5°)
+      const ySafeTop = valToY(37.5);
+      const ySafeBottom = valToY(36.5);
+      ctx.fillStyle = 'rgba(16, 185, 129, 0.18)';
+      ctx.fillRect(0, ySafeTop, canvas.width, ySafeBottom - ySafeTop);
+      
+      // Líneas límite de la franja segura
+      ctx.strokeStyle = 'rgba(16, 185, 129, 0.5)';
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(0, ySafeTop);
+      ctx.lineTo(canvas.width, ySafeTop);
+      ctx.moveTo(0, ySafeBottom);
+      ctx.lineTo(canvas.width, ySafeBottom);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Dibujar Línea de Set-Point (37.0°C)
+      const ySetPoint = valToY(37.0);
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.35)';
+      ctx.beginPath();
+      ctx.moveTo(0, ySetPoint);
+      ctx.lineTo(canvas.width, ySetPoint);
+      ctx.stroke();
+
+      // Dibujar Trazado Continuo de la Onda
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      for (let i = 0; i < historyData.length; i++) {
+        const x = i * 3;
+        const y = valToY(historyData[i]);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+
+      // Color dinámico según si está en rango o fuera de rango
+      if (currentValue >= 36.5 && currentValue <= 37.5) {
+        ctx.strokeStyle = '#10b981'; // Verde homeostático
+        ctx.shadowColor = 'rgba(16, 185, 129, 0.6)';
+        ctx.shadowBlur = 10;
+      } else if (currentValue > 37.5) {
+        ctx.strokeStyle = '#f43f5e'; // Rojo fiebre/calor
+        ctx.shadowColor = 'rgba(244, 63, 94, 0.7)';
+        ctx.shadowBlur = 12;
+      } else {
+        ctx.strokeStyle = '#38bdf8'; // Celeste frío
+        ctx.shadowColor = 'rgba(56, 189, 248, 0.7)';
+        ctx.shadowBlur = 12;
+      }
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Puntero de escaneo en tiempo real
+      const lastX = (historyData.length - 1) * 3;
+      const lastY = valToY(currentValue);
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(lastX, lastY, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      animId = requestAnimationFrame(animateCanvas);
+    }
+
+    /* ==========================================================
+       6. RETO 2: ENSAMBLADOR DE BUCLE PASO A PASO
+       ========================================================== */
+    const r2Elements = [
+      { id: "e1", category: "estímulo", title: "1. Estímulo", text: "Ingesta de alimentos ricos en azúcares que eleva la glucosa en sangre a 130 mg/dL.", correctPos: 0 },
+      { id: "e2", category: "receptor", title: "2. Receptor", text: "Células Beta de los Islotes de Langerhans detectan la alta concentración de glucosa.", correctPos: 1 },
+      { id: "e3", category: "centro", title: "3. Centro de Control", text: "Páncreas endocrino integra la información y secreta la hormona Insulina.", correctPos: 2 },
+      { id: "e4", category: "efector", title: "4. Efector", text: "Hepatocitos (hígado) y células musculares captan glucosa para formar glucógeno.", correctPos: 3 },
+      { id: "e5", category: "respuesta", title: "5. Respuesta", text: "Descenso de la glucemia de regreso al rango seguro (70-100 mg/dL).", correctPos: 4 }
+    ];
+
+    function initOrderChallenge() {
+      // Barajar elementos para el reto
+      const shuffled = [...r2Elements].sort(() => Math.random() - 0.5);
+      state.r2SelectedSlots = [null, null, null, null, null];
+
+      const pool = document.getElementById('scrambledPool');
+      pool.innerHTML = '';
+      shuffled.forEach(item => {
+        const btn = document.createElement('div');
+        btn.id = `item-${item.id}`;
+        btn.className = "cursor-pointer p-3 rounded-xl bg-white border border-slate-300 shadow-xs hover:border-accent hover:bg-accent-light text-xs text-slate-800 transition-all font-medium max-w-xs flex-1";
+        btn.innerHTML = `<strong class="text-accent block mb-0.5"><i class="fa-solid fa-hand-pointer mr-1"></i> Ficha:</strong> ${item.text}`;
+        btn.onclick = () => addItemToFirstEmptySlot(item);
+        pool.appendChild(btn);
+      });
+
+      renderSlots();
+    }
+
+    function renderSlots() {
+      const slotContainer = document.getElementById('targetSlots');
+      slotContainer.innerHTML = '';
+
+      const slotNames = ["Paso 1: Estímulo", "Paso 2: Receptor", "Paso 3: Centro de Control", "Paso 4: Efector", "Paso 5: Respuesta"];
+
+      state.r2SelectedSlots.forEach((item, index) => {
+        const slot = document.createElement('div');
+        slot.className = `p-3 rounded-xl border-2 min-h-28 flex flex-col justify-between transition-all ${
+          item ? 'bg-white border-accent shadow-xs' : 'border-dashed border-slate-300 bg-white/60 text-slate-400'
+        }`;
+
+        if (item) {
+          slot.innerHTML = `
+            <div>
+              <span class="text-[10px] font-black uppercase text-accent block">${slotNames[index]}</span>
+              <p class="text-xs text-slate-800 font-medium mt-1">${item.text}</p>
+            </div>
+            <button onclick="removeSlotItem(${index})" class="text-[10px] text-rose-500 hover:text-rose-700 font-bold mt-2 self-end">
+              <i class="fa-solid fa-trash-can mr-1"></i> Quitar
+            </button>
+          `;
+        } else {
+          slot.innerHTML = `
+            <div class="h-full flex flex-col items-center justify-center text-center py-4">
+              <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-500 font-bold text-xs flex items-center justify-center mb-1">${index + 1}</span>
+              <span class="text-[11px] font-bold text-slate-400">${slotNames[index]}</span>
+              <span class="text-[10px] text-slate-400 mt-1">(Vacío)</span>
+            </div>
+          `;
+        }
+
+        slotContainer.appendChild(slot);
+      });
+    }
+
+    function addItemToFirstEmptySlot(item) {
+      const emptyIdx = state.r2SelectedSlots.findIndex(s => s === null);
+      if (emptyIdx === -1) {
+        showTemporaryToast("Todos los 5 casilleros están llenos. Haz clic en 'Verificar' o quita una ficha.");
+        return;
+      }
+
+      state.r2SelectedSlots[emptyIdx] = item;
+      document.getElementById(`item-${item.id}`).classList.add('opacity-30', 'pointer-events-none');
+      playBeep('ping');
+      renderSlots();
+    }
+
+    function removeSlotItem(slotIndex) {
+      const item = state.r2SelectedSlots[slotIndex];
+      if (item) {
+        document.getElementById(`item-${item.id}`).classList.remove('opacity-30', 'pointer-events-none');
+        state.r2SelectedSlots[slotIndex] = null;
+        renderSlots();
+      }
+    }
+
+    function resetOrderChallenge() {
+      initOrderChallenge();
+      document.getElementById('r2FeedbackMsg').innerHTML = "Ubica los 5 componentes en orden cronológico funcional.";
+      document.getElementById('r2FeedbackMsg').className = "text-xs sm:text-sm font-semibold text-slate-600";
+    }
+
+    function validateOrderChallenge() {
+      if (state.r2SelectedSlots.includes(null)) {
+        playBeep('error');
+        document.getElementById('r2FeedbackMsg').innerHTML = "<span class='text-amber-600'><i class='fa-solid fa-triangle-exclamation'></i> Debes completar los 5 pasos del circuito antes de validar.</span>";
+        return;
+      }
+
+      let isCorrect = true;
+      for (let i = 0; i < 5; i++) {
+        if (state.r2SelectedSlots[i].correctPos !== i) {
+          isCorrect = false;
+          break;
+        }
+      }
+
+      const msg = document.getElementById('r2FeedbackMsg');
+      if (isCorrect) {
+        playBeep('correct');
+        if (!state.completedChallenges.ch2) {
+          state.completedChallenges.ch2 = true;
+          addScore(200);
+        }
+        msg.innerHTML = "<span class='text-emerald-700 font-bold'><i class='fa-solid fa-circle-check'></i> ¡Excelente! Has ordenado con total precisión la secuencia cibernética: Estímulo $\\rightarrow$ Receptor $\\rightarrow$ Centro $\\rightarrow$ Efector $\\rightarrow$ Respuesta (+200 pts).</span>";
+      } else {
+        playBeep('error');
+        msg.innerHTML = "<span class='text-rose-600 font-bold'><i class='fa-solid fa-circle-xmark'></i> Secuencia incorrecta. Recuerda: El receptor detecta antes de que el centro procese la orden, y el efector actúa para generar la respuesta. Revisa y reintenta.</span>";
+      }
+    }
+
+    /* ==========================================================
+       7. RETO 3: DUELO DE BUCLES (NEGATIVO VS POSITIVO)
+       ========================================================== */
+    const quizQuestions = [
+      {
+        title: "Regulación de la Presión Arterial en bipedestación",
+        desc: "Cuando una persona se levanta de golpe, la presión cae. Los barorreceptores arteriales activan el sistema nervioso simpático para acelerar el corazón y contraer vasos, devolviendo la presión a 120/80 mmHg.",
+        category: "Cardiovascular",
+        type: "negativo",
+        explanation: "Es Retroalimentación Negativa porque la respuesta (aumentar presión) contrarresta e invierte la perturbación original (caída de presión) para mantener la estabilidad."
+      },
+      {
+        title: "Contracciones Uterinas durante el Parto (Reflejo de Ferguson)",
+        desc: "La cabeza fetal empuja contra el cuello uterino; los receptores envían impulsos al hipotálamo, que libera oxitocina. La oxitocina genera contracciones aún más intensas, empujando más al feto y provocando mayor liberación de oxitocina.",
+        category: "Obstetricia",
+        type: "positivo",
+        explanation: "Es Retroalimentación Positiva porque la respuesta refuerza y amplifica el estímulo inicial en la misma dirección, culminando con el nacimiento del bebé."
+      },
+      {
+        title: "Sudoración profusa ante un Golpe de Calor",
+        desc: "Un paciente expuesto al sol de San Juan en pleno verano eleva su temperatura a 38.5 °C. El hipotálamo estimula las glándulas sudoríparas para secretar agua que, al evaporarse en la piel, disipa el calor y baja la temperatura.",
+        category: "Termorregulación",
+        type: "negativo",
+        explanation: "Es Retroalimentación Negativa: la sudoración busca disminuir la variable térmica, oponiéndose al calentamiento inicial."
+      },
+      {
+        title: "Cascada de Coagulación tras una Punción Venosa",
+        desc: "Al tomar una muestra de sangre, se daña la pared del vaso. Las primeras plaquetas adheridas liberan sustancias químicas que atraen rápidamente a más plaquetas en avalancha, formando el tapón hemostático definitivo en minutos.",
+        category: "Hematología",
+        type: "positivo",
+        explanation: "Es Retroalimentación Positiva: cada plaqueta activada acelera el reclutamiento de más plaquetas hasta sellar la brecha vascular de forma explosiva y transitoria."
+      },
+      {
+        title: "Secreción de Insulina tras el Desayuno",
+        desc: "La concentración de glucosa en plasma aumenta luego de comer una medialuna. El páncreas libera insulina, induciendo el almacenamiento de azúcar en el hígado y músculo hasta que la glucemia regresa a 85 mg/dL.",
+        category: "Metabolismo",
+        type: "negativo",
+        explanation: "Es Retroalimentación Negativa: la hormona reduce el azúcar elevado hacia su nivel basal, contrarrestando la hiperglucemia."
+      },
+      {
+        title: "Fase de Despolarización del Potencial de Acción Neuronal",
+        desc: "En una neurona motora, la entrada inicial de sodio ($Na^+$) despolariza la membrana celular, lo que abre más canales de sodio dependientes de voltaje, permitiendo una entrada todavía más masiva de iones $Na^+$.",
+        category: "Neurofisiología",
+        type: "positivo",
+        explanation: "Es Retroalimentación Positiva transitoria: la entrada de $Na^+$ promueve más entrada de $Na^+$, disparando la espiga del potencial de acción."
+      }
+    ];
+
+    function renderQuizQuestion() {
+      const q = quizQuestions[state.quizIndex];
+      document.getElementById('quizCounterText').textContent = `Caso ${state.quizIndex + 1} de ${quizQuestions.length}`;
+      document.getElementById('quizCaseCategory').textContent = q.category;
+      document.getElementById('quizQuestionTitle').textContent = q.title;
+      document.getElementById('quizQuestionDesc').textContent = q.desc;
+
+      const fBox = document.getElementById('quizFeedbackBox');
+      fBox.classList.add('hidden');
+      fBox.innerHTML = '';
+    }
+
+    function handleFeedbackAnswer(selectedType) {
+      const q = quizQuestions[state.quizIndex];
+      const isCorrect = selectedType === q.type;
+      const fBox = document.getElementById('quizFeedbackBox');
+      fBox.classList.remove('hidden');
+
+      if (isCorrect) {
+        playBeep('correct');
+        state.quizCorrectCount++;
+        addScore(40); // 40 pts * 6 = 240 pts
+        fBox.className = "mt-4 p-4 rounded-xl text-xs sm:text-sm bg-emerald-50 border border-emerald-300 text-emerald-900 leading-relaxed";
+        fBox.innerHTML = `
+          <div class="flex items-start gap-2.5">
+            <i class="fa-solid fa-circle-check text-emerald-600 text-lg mt-0.5 shrink-0"></i>
+            <div>
+              <strong class="font-bold text-emerald-800">¡Correcto! (+40 pts)</strong>
+              <p class="mt-1">${q.explanation}</p>
+            </div>
+          </div>
+          <button onclick="nextQuizQuestion()" class="mt-3 px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs">
+            Continuar al Siguiente Caso <i class="fa-solid fa-arrow-right ml-1"></i>
+          </button>
+        `;
+      } else {
+        playBeep('error');
+        fBox.className = "mt-4 p-4 rounded-xl text-xs sm:text-sm bg-rose-50 border border-rose-300 text-rose-900 leading-relaxed";
+        fBox.innerHTML = `
+          <div class="flex items-start gap-2.5">
+            <i class="fa-solid fa-circle-xmark text-rose-600 text-lg mt-0.5 shrink-0"></i>
+            <div>
+              <strong class="font-bold text-rose-800">Respuesta Incorrecta</strong>
+              <p class="mt-1">${q.explanation}</p>
+            </div>
+          </div>
+          <button onclick="nextQuizQuestion()" class="mt-3 px-4 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs">
+            Continuar <i class="fa-solid fa-arrow-right ml-1"></i>
+          </button>
+        `;
+      }
+    }
+
+    function nextQuizQuestion() {
+      if (state.quizIndex < quizQuestions.length - 1) {
+        state.quizIndex++;
+        renderQuizQuestion();
+      } else {
+        state.completedChallenges.ch3 = true;
+        showQuizFinalSummary();
+      }
+    }
+
+    function showQuizFinalSummary() {
+      const container = document.getElementById('quizContainer');
+      container.innerHTML = `
+        <div class="text-center py-6 space-y-4">
+          <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl mx-auto">
+            <i class="fa-solid fa-clipboard-check"></i>
+          </div>
+          <h4 class="font-heading font-black text-2xl text-slate-900">¡Duelo de Bucles Completado!</h4>
+          <p class="text-sm text-slate-600 max-w-md mx-auto">
+            Obtuviste <strong>${state.quizCorrectCount} de ${quizQuestions.length}</strong> respuestas correctas. Distinguir la retroalimentación negativa como el eje protector del paciente es vital en tu futura labor hospitalaria.
+          </p>
+          <div class="pt-2">
+            <button onclick="restartQuiz()" class="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs">
+              <i class="fa-solid fa-rotate-left mr-1"></i> Repetir Reto 3
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function restartQuiz() {
+      state.quizIndex = 0;
+      state.quizCorrectCount = 0;
+      const container = document.getElementById('quizContainer');
+      container.innerHTML = `
+        <div class="flex items-center justify-between text-xs font-bold text-slate-500 mb-4">
+          <span id="quizCounterText">Caso 1 de 6</span>
+          <span id="quizCaseCategory" class="px-2.5 py-0.5 rounded bg-white border border-slate-200 text-accent font-bold">Fisiología</span>
+        </div>
+        <div class="min-h-24">
+          <h4 id="quizQuestionTitle" class="text-lg sm:text-xl font-heading font-bold text-slate-900 leading-snug"></h4>
+          <p id="quizQuestionDesc" class="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed"></p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+          <button onclick="handleFeedbackAnswer('negativo')" class="p-4 rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 font-heading font-extrabold text-sm sm:text-base transition-all active:scale-98 flex items-center justify-center gap-3 shadow-xs">
+            <i class="fa-solid fa-rotate-left text-xl text-emerald-600"></i>
+            <span>Retroalimentación Negativa</span>
+          </button>
+          <button onclick="handleFeedbackAnswer('positivo')" class="p-4 rounded-xl border-2 border-amber-300 bg-white hover:bg-amber-50 text-amber-800 font-heading font-extrabold text-sm sm:text-base transition-all active:scale-98 flex items-center justify-center gap-3 shadow-xs">
+            <i class="fa-solid fa-bolt-lightning text-xl text-amber-600"></i>
+            <span>Retroalimentación Positiva</span>
+          </button>
+        </div>
+        <div id="quizFeedbackBox" class="mt-4 p-4 rounded-xl hidden text-xs sm:text-sm"></div>
+      `;
+      renderQuizQuestion();
+    }
+
+    function switchChallenge(chNum) {
+      document.querySelectorAll('.challenge-box').forEach(b => b.classList.add('hidden'));
+      document.querySelectorAll('.ch-nav-btn').forEach(btn => {
+        btn.className = "ch-nav-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-gray-700 border border-gray-200 hover:bg-gray-100";
+      });
+
+      const currentBox = document.getElementById(`challenge-${chNum}`);
+      if (currentBox) currentBox.classList.remove('hidden');
+
+      const currentBtn = document.getElementById(`chBtn-${chNum}`);
+      if (currentBtn) {
+        currentBtn.className = "ch-nav-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-accent text-white shadow-xs";
+      }
+
+      if (chNum === 1) {
+        setTimeout(initCanvas, 50);
+      }
+    }
+
+    /* ==========================================================
+       8. MODAL DE CERTIFICADO SIMBÓLICO
+       ========================================================== */
+    function openDiplomaModal() {
+      playBeep('correct');
+      document.getElementById('diplomaModal').classList.remove('hidden');
+    }
+
+    function closeDiplomaModal() {
+      document.getElementById('diplomaModal').classList.add('hidden');
+    }
+
+    function showTemporaryToast(message) {
+      const toast = document.createElement('div');
+      toast.className = "fixed bottom-5 right-5 z-50 bg-slate-900 text-white px-4 py-2.5 rounded-xl text-xs font-medium shadow-2xl flex items-center gap-2 border border-slate-700 animate-bounce";
+      toast.innerHTML = `<i class="fa-solid fa-info-circle text-amber-400"></i> ${message}`;
+      document.body.appendChild(toast);
+      setTimeout(() => { toast.remove(); }, 3200);
+    }
+
+    /* ==========================================================
+       9. INICIALIZACIÓN AL CARGAR LA PÁGINA
+       ========================================================== */
+    window.addEventListener('load', () => {
+      // Iniciar Módulo 1 en temperatura
+      inspectVariable('temp');
+      // Iniciar Módulo 2 en hipertermia y paso 1
+      selectCircuitStep(1);
+      // Iniciar Reto 2
+      initOrderChallenge();
+      // Iniciar Reto 3
+      renderQuizQuestion();
+      // Inicializar Canvas
+      initCanvas();
+
+      // Renderizar fórmulas KaTeX iniciales
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+            { left: '\\(', right: '\\)', display: false },
+            { left: '\\[', right: '\\]', display: true }
+          ],
+          throwOnError: false
+        });
+      }
+    });
+  </script>
+</body>
+</html>
